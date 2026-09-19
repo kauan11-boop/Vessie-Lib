@@ -1,3 +1,0 @@
-# Diretório de logs do sistema Vessie
-# Cada script gera seu próprio arquivo de log em runtime.
-# Este arquivo .gitkeep garante que o diretório seja versionado no Git.

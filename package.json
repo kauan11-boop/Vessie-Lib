@@ -1,36 +1,22 @@
 {
-  "name": "vessie-lib",
+  "name": "vessie-chatbot",
+  "private": true,
   "version": "1.0.0",
-  "description": "Sistema otimizado de envio e recebimento de informações do modelo de IA (LM Studio). Inclui linguagem VSL customizada, pooling de conexões, streaming eficiente, retry com backoff e gerenciamento de tokens.",
-  "author": "Vessie-Lib",
-  "license": "MIT",
-  "private": false,
-  "engines": { "node": ">=20" },
-  "main": "Vessie/index.js",
-  "bin": {
-    "vessie": "Vessie/index.js"
-  },
+  "type": "module",
+  "description": "Chatbot completo em React + Vite, com deploy automático no GitHub Pages",
   "scripts": {
-    "start": "node Vessie/index.js",
-    "vsl": "node Vessie/index.js --vsl",
-    "send": "node Vessie/scripts/send_message.js",
-    "receive": "node Vessie/scripts/receive_response.js",
-    "stream": "node Vessie/scripts/stream_response.js",
-    "models": "node Vessie/scripts/list_models.js",
-    "batch": "node Vessie/scripts/batch_request.js",
-    "test": "node Vessie/scripts/test_connection.js",
-    "config": "node Vessie/scripts/config_manager.js",
-    "report": "node Vessie/scripts/test_connection.js && node Vessie/scripts/list_models.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
-  "keywords": ["lm-studio", "llm", "ai", "chat", "streaming", "optimization", "vsl"],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kauan11-boop/Vessie-Lib.git"
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
-  "homepage": "https://kauan11-boop.github.io/Vessie-Lib/",
-  "bugs": {
-    "url": "https://github.com/kauan11-boop/Vessie-Lib/issues"
-  },
-  "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "gh-pages": "^6.1.1",
+    "vite": "^5.4.0"
+  }
 }
