@@ -1,0 +1,24 @@
+# ============================================================
+# Exemplo: hello_world.vsl
+# Demonstra os comandos básicos da linguagem VSL.
+# Executa: node Vessie/index.js vsl Vessie/vsl/examples/hello_world.vsl
+# ============================================================
+
+config {
+  url = "http://localhost:1234/v1"
+  model = ""
+  temperature = 0.7
+  systemPrompt = "Você é um assistente conciso e direto."
+}
+
+print "Conectando ao LM Studio..."
+
+# Lista modelos disponíveis
+model list
+
+# Envia uma mensagem e recebe a resposta
+print "Enviando mensagem..."
+send "Olá, qual é a capital do Brasil?"
+receive
+
+print "Pronto! Sistema Vessie funcionando corretamente."

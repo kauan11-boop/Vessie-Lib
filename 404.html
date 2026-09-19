@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Redirecionando… · Forja</title>
+<style>
+  html,body{height:100%;margin:0;background:#0f0e0c;color:#a39a8c;
+            font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+            display:grid;place-items:center;}
+  .box{text-align:center;padding:24px;}
+  .mark{font-size:34px;font-weight:700;color:#ece6dc;letter-spacing:-.01em;}
+  .dot{color:#e08a3c;}
+  p{font-size:14px;margin-top:10px;color:#6f6759;}
+  a{color:#e08a3c;}
+</style>
+</head>
+<body>
+  <div class="box">
+    <div class="mark">Forja<span class="dot">.</span></div>
+    <p>Redirecionando para o aplicativo…</p>
+    <p><a id="manual" href="./">Abrir o Forja</a></p>
+  </div>
+
+<script>
+  /* ============================================================
+     404.html — GitHub Pages SPA fallback
+     Quando alguém abre .../Vessie-Lib/settings (rota que não existe
+     como arquivo), o GitHub Pages serve este 404. Aqui capturamos o
+     caminho original e redirecionamos para:
+        .../Vessie-Lib/?/settings
+     O index.html então lê o "?/settings", corrige a URL e abre a aba.
+     ============================================================ */
+  (function () {
+    var l = window.location;
+    var base = l.pathname.split('/').slice(0, 2).join('/'); // "/Vessie-Lib" (projeto) ou "/" (user page)
+    var rest = l.pathname.slice(base.length).replace(/^\/+/, ''); // "settings"
+    var target = base + '/?/' + rest +
+                 (l.search ? '&' + l.search.slice(1) : '') +
+                 (l.hash || '');
+    document.getElementById('manual').href = target;
+    l.replace(target);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+/* ============================================================
+   FORJA — preview.css
+   Estilos do módulo de preview (js/preview.js).
+   Carregado após style.css e responsive.css.
+   ============================================================ */
+
+/* ---------- botão "visualizar" no cabeçalho do codeblock ---------- */
+.codeblock-head .code-preview{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 9px; border-radius:6px; border:none;
+  background:transparent; color:var(--text-faint);
+  font-family:var(--mono); font-size:10px; text-transform:uppercase;
+  letter-spacing:.08em; cursor:pointer; transition:.12s;
+}
+.codeblock-head .code-preview:hover{color:var(--accent); background:var(--accent-soft);}
+.codeblock-head .code-preview svg{transform:translateY(.5px);}
+
+/* Ajuste: quando há botão de preview, o cabeçalho agrupa os botões à direita */
+.codeblock-head .code-copy{margin-left:2px;}
+
+/* ---------- overlay do preview ---------- */
+.preview-overlay{z-index:100;}
+
+.preview-modal{
+  width:min(1100px, calc(100vw - 28px));
+  height:min(86vh, 900px);
+  max-height:calc(100dvh - 28px);
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:16px;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+  transform:translateY(14px) scale(.985);
+  transition:transform .2s ease;
+  box-shadow:0 24px 60px rgba(0,0,0,.55);
+}
+.preview-overlay.open .preview-modal{transform:none;}
+
+.preview-head{
+  flex-shrink:0;
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px 12px 18px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.preview-title-wrap{display:flex; align-items:center; gap:10px; min-width:0; flex:1;}
+.preview-title{
+  font-size:14px; font-weight:600; color:var(--text);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;
+}
+.preview-badge{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); background:var(--accent-soft);
+  border:1px solid rgba(224,138,60,.35); border-radius:999px;
+  padding:3px 9px; flex-shrink:0;
+}
+.preview-actions{display:flex; align-items:center; gap:8px; flex-shrink:0;}
+
+.preview-body{
+  flex:1; min-height:0; position:relative; background:#fff;
+}
+@media (prefers-color-scheme:dark){
+  .preview-body{background:#0f0e0c;}
+}
+.preview-frame{
+  width:100%; height:100%; border:none; display:block; background:#fff;
+}
+@media (prefers-color-scheme:dark){
+  .preview-frame{background:#0f0e0c;}
+}
+
+/* Enquanto o preview está aberto, trava o scroll do body */
+body.preview-open{overflow:hidden;}
+
+/* ---------- dropzone (arrastar e soltar arquivo) ---------- */
+.preview-dropzone{
+  position:fixed; inset:0; z-index:130;
+  display:none; place-items:center;
+  background:rgba(10,9,7,.78); backdrop-filter:blur(5px);
+}
+.preview-dropzone.show{display:grid; animation:fadeUp .18s ease;}
+.dropzone-box{
+  width:min(460px, calc(100vw - 48px));
+  padding:38px 30px; text-align:center;
+  border:2px dashed var(--accent); border-radius:18px;
+  background:rgba(224,138,60,.06);
+  color:var(--accent);
+}
+.dropzone-box svg{margin-bottom:14px; opacity:.9;}
+.dropzone-box p{font-size:16px; font-weight:600; color:var(--text); margin:0 0 6px;}
+.dropzone-box span{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint);}

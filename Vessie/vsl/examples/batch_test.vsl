@@ -1,0 +1,30 @@
+# ============================================================
+# Exemplo: batch_test.vsl
+# Demonstra processamento batch e comparação de modelos.
+# Executa: node Vessie/index.js vsl Vessie/vsl/examples/batch_test.vsl
+# ============================================================
+
+config {
+  url = "http://localhost:1234/v1"
+  temperature = 0.3
+  stream = false
+}
+
+print "Iniciando teste batch..."
+
+# Lista modelos para comparação
+model list
+
+# Batch de perguntas sobre diferentes tópicos
+batch {
+  send "Qual a diferença entre HTTP e HTTPS?"
+  receive
+
+  send "O que é um algoritmo de ordenação?"
+  receive
+
+  send "Explique o conceito de API REST."
+  receive
+}
+
+print "Teste batch concluído com sucesso!"

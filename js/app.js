@@ -20,9 +20,12 @@ const ICONS = {
   chevronDown:'<path d="m6 9 6 6 6-6"/>',
   plug:'<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>',
   flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
-  info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>'
+  info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>'
 };
 const icon = (n, s=16) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;
+// Expõe o helper globalmente para módulos adicionais (ex.: js/preview.js)
+window.icon = icon;
 
 // ---------- utilidades ----------
 const $ = s => document.querySelector(s);
@@ -66,9 +69,9 @@ function save(){
 const els = {};
 ['sidebar','scrim','menuBtn','newChat','chatList','openSettings','chatTitle','connPill','connDot',
  'connText','exportBtn','clearBtn','scroller','msgList','scrollDown','input','sendBtn','counter',
- 'footModel','toasts','settingsOverlay','setClose','setUrl','setModel','modelList','setRefresh',
+ 'footModel','toasts','setUrl','setModel','modelList','setRefresh',
  'setSystem','setTemp','tempVal','setTopP','topPVal','setMaxTok','setStream','setTest','setCancel',
- 'setSave','confirmOverlay','cfTitle','cfMsg','cfOk','cfCancel'
+ 'setSave','confirmOverlay','cfTitle','cfMsg','cfOk','cfCancel','tabHeading'
 ].forEach(id => els[id] = document.getElementById(id));
 
 // ---------- markdown ----------
@@ -91,6 +94,10 @@ function enhanceCodeBlocks(scope){
     head.innerHTML = `<span>${esc(lang)}</span><button class="code-copy">${icon('copy',12)} copiar</button>`;
     pre.replaceWith(wrap); wrap.appendChild(head); wrap.appendChild(pre);
     if(code && window.hljs) { try { hljs.highlightElement(code); } catch {} }
+    // Botão "visualizar" (preview HTML) para blocos previewáveis
+    if(window.FilePreview && window.FilePreview.enhance) {
+      try { window.FilePreview.enhance(pre); } catch {}
+    }
   });
   scope.querySelectorAll('.md a').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
 }
@@ -582,7 +589,8 @@ function saveEdit(m, val){
 }
 
 // ---------- configurações ----------
-function openSettings(){
+// Preenche os campos do painel /settings sem navegar (evita loop com o router)
+function fillSettingsForm(){
   const s = state.settings;
   els.setUrl.value = s.baseUrl;
   els.setModel.value = s.model;
@@ -591,7 +599,10 @@ function openSettings(){
   els.setTopP.value = s.topP; els.topPVal.textContent = Number(s.topP).toFixed(2);
   els.setMaxTok.value = s.maxTokens;
   els.setStream.checked = !!s.stream;
-  els.settingsOverlay.classList.add('open');
+}
+function openSettings(){
+  fillSettingsForm();
+  if(window.ForjaRouter) window.ForjaRouter.go('settings');
 }
 async function testFromFields(){
   const url = els.setUrl.value.trim();
@@ -610,7 +621,6 @@ async function testFromFields(){
 // ---------- eventos ----------
 function bindEvents(){
   els.newChat.addEventListener('click', newChat);
-  els.openSettings.addEventListener('click', openSettings);
   els.connPill.addEventListener('click', () => ping(true));
   els.exportBtn.addEventListener('click', exportMd);
   els.clearBtn.addEventListener('click', clearChat);
@@ -658,10 +668,8 @@ function bindEvents(){
     if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){ e.preventDefault(); newChat(); }
   });
 
-  // modais
-  els.setClose.addEventListener('click', () => els.settingsOverlay.classList.remove('open'));
-  els.setCancel.addEventListener('click', () => els.settingsOverlay.classList.remove('open'));
-  els.settingsOverlay.addEventListener('click', e => { if(e.target === els.settingsOverlay) els.settingsOverlay.classList.remove('open'); });
+  // painel de configurações (rota /settings)
+  els.setCancel.addEventListener('click', () => { if(window.ForjaRouter) window.ForjaRouter.go('chat'); });
   els.setTemp.addEventListener('input', () => els.tempVal.textContent = Number(els.setTemp.value).toFixed(2));
   els.setTopP.addEventListener('input', () => els.topPVal.textContent = Number(els.setTopP.value).toFixed(2));
   els.setRefresh.addEventListener('click', testFromFields);
@@ -680,7 +688,7 @@ function bindEvents(){
       stream: els.setStream.checked
     };
     save(); updateComposer();
-    els.settingsOverlay.classList.remove('open');
+    if(window.ForjaOptimizer && window.ForjaOptimizer.updateConfig) window.ForjaOptimizer.updateConfig(state.settings);
     toast('Configurações salvas','ok');
     ping();
   });
@@ -698,12 +706,12 @@ function closeSidebarMobile(){
 function initIcons(){
   document.querySelector('[data-icon="flame"]').innerHTML = icon('flame', 19);
   els.newChat.innerHTML = icon('plus', 16) + '<span>Nova conversa</span>';
-  els.openSettings.innerHTML = icon('sliders', 15) + '<span>Configurações</span>';
+  const sideSettings = document.querySelector('.sidebar-foot [data-tab-link="settings"]');
+  if(sideSettings) sideSettings.innerHTML = icon('sliders', 15) + '<span>Configurações</span>';
   els.menuBtn.innerHTML = icon('panel', 18);
   els.exportBtn.innerHTML = icon('download', 16);
   els.clearBtn.innerHTML = icon('trash', 16);
   els.scrollDown.innerHTML = icon('chevronDown', 17);
-  els.setClose.innerHTML = icon('x', 16);
   els.setRefresh.innerHTML = icon('refresh', 15);
   els.setTest.innerHTML = icon('plug', 15) + '<span>Testar conexão</span>';
   els.setSave.innerHTML = icon('check', 15) + '<span>Salvar</span>';
@@ -716,5 +724,11 @@ function init(){
   updateComposer(); updateCount(); autosize();
   ping();
   setInterval(() => { if(!state.generating) ping(); }, 20000);
+
+  // Ao entrar na rota /settings, preenche os campos (sem navegar — evita loop)
+  if(window.ForjaRouter) window.ForjaRouter.sync(r => { if(r === 'settings') fillSettingsForm(); });
 }
 init();
+
+// Expõe o estado para módulos externos (ex.: js/panels.js lê a latência)
+window.ForjaState = state;

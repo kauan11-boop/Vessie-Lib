@@ -1,0 +1,36 @@
+{
+  "name": "vessie-lib",
+  "version": "1.0.0",
+  "description": "Sistema otimizado de envio e recebimento de informações do modelo de IA (LM Studio). Inclui linguagem VSL customizada, pooling de conexões, streaming eficiente, retry com backoff e gerenciamento de tokens.",
+  "author": "Vessie-Lib",
+  "license": "MIT",
+  "private": false,
+  "engines": { "node": ">=20" },
+  "main": "Vessie/index.js",
+  "bin": {
+    "vessie": "Vessie/index.js"
+  },
+  "scripts": {
+    "start": "node Vessie/index.js",
+    "vsl": "node Vessie/index.js --vsl",
+    "send": "node Vessie/scripts/send_message.js",
+    "receive": "node Vessie/scripts/receive_response.js",
+    "stream": "node Vessie/scripts/stream_response.js",
+    "models": "node Vessie/scripts/list_models.js",
+    "batch": "node Vessie/scripts/batch_request.js",
+    "test": "node Vessie/scripts/test_connection.js",
+    "config": "node Vessie/scripts/config_manager.js",
+    "report": "node Vessie/scripts/test_connection.js && node Vessie/scripts/list_models.js"
+  },
+  "keywords": ["lm-studio", "llm", "ai", "chat", "streaming", "optimization", "vsl"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kauan11-boop/Vessie-Lib.git"
+  },
+  "homepage": "https://kauan11-boop.github.io/Vessie-Lib/",
+  "bugs": {
+    "url": "https://github.com/kauan11-boop/Vessie-Lib/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
