@@ -1,0 +1,34 @@
+{
+  "version": "0.1.0",
+  "node": "v24.20.0",
+  "bundle": {
+    "file": "dist/VessieLang.js",
+    "bytes": 398014
+  },
+  "steps": [
+    {
+      "name": "lint e verificação dos exemplos",
+      "ms": 9718
+    },
+    {
+      "name": "consistência stdlib (assinaturas × implementação)",
+      "ms": 1
+    },
+    {
+      "name": "runtime distribuível",
+      "ms": 631
+    },
+    {
+      "name": "VessieLang.js em dist/ (sistema compilado; bundle-self já valida)",
+      "ms": 9971
+    },
+    {
+      "name": "CLI via dist/VessieLang.js (verificação do ponto de entrada)",
+      "ms": 185
+    },
+    {
+      "name": "smoke test headless via dist/VessieLang.js (hello.vessie)",
+      "ms": 369
+    }
+  ]
+}
